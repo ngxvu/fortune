@@ -1,6 +1,7 @@
 package service
 
 import (
+	"gitlab.com/merakilab9/meracrawler/fortune/pkg/model"
 	"io/ioutil"
 	"net/http"
 )
@@ -14,14 +15,14 @@ func NewFortuneService(client *http.Client) FortuneInterface {
 }
 
 type FortuneInterface interface {
-	ProcessURLsCate(client *http.Client, urls []string) (string, error)
+	ProcessURLsCate(client *http.Client, urls model.Data) (string, error)
 }
 
-func (s *FortuneService) ProcessURLsCate(client *http.Client, urls []string) (string, error) {
+func (s *FortuneService) ProcessURLsCate(client *http.Client, urls model.Data) (string, error) {
 	method := "GET"
 	var bodies [][]byte
-	for _, url := range urls {
-		req, err := http.NewRequest(method, url, nil)
+	for _, urls := range urls.APIs {
+		req, err := http.NewRequest(method, urls.URL, nil)
 		if err != nil {
 			return "", err
 		}

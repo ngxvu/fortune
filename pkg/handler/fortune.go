@@ -3,6 +3,7 @@ package handler
 import (
 	"gitlab.com/merakilab9/meracore/ginext"
 	"gitlab.com/merakilab9/meracore/logger"
+	"gitlab.com/merakilab9/meracrawler/fortune/pkg/model"
 	"gitlab.com/merakilab9/meracrawler/fortune/pkg/service"
 	"gitlab.com/merakilab9/meracrawler/fortune/pkg/utils"
 	"net/http"
@@ -18,15 +19,14 @@ func NewFortuneHandlers(service service.FortuneInterface) *FortuneHandler {
 
 func (h *FortuneHandler) ProcessURLsCate(r *ginext.Request) (*ginext.Response, error) {
 	log := logger.WithCtx(r.GinCtx, "ProcessURLsCate")
-
-	var urls []string
+	var urls model.Data
 	if err := r.GinCtx.ShouldBindJSON(&urls); err != nil {
 		log.Println("Can not Decode Urls.", err)
-		return nil, ginext.NewError(http.StatusInternalServerError, utils.MessageError()[http.StatusBadRequest])
+		return nil, ginext.NewError(http.StatusBadRequest, utils.MessageError()[http.StatusBadRequest])
 	}
 
-	if len(urls) == 0 {
-		log.Fatal("No URLs provided.")
+	if len(urls.APIs) == 0 {
+		log.Fatal("No APIs provided.")
 		return nil, ginext.NewError(http.StatusNotFound, "")
 	}
 	client := &http.Client{}
