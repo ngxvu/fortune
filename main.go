@@ -14,6 +14,7 @@ const (
 )
 
 func main() {
+
 	conf.SetEnv()
 	logger.Init(APPNAME)
 	utils.LoadMessageError()
