@@ -44,3 +44,11 @@ type APIResponseList struct {
 type APIResponseOne struct {
 	Data interface{} `json:"data"`
 }
+
+type API struct {
+	URL string `json:"url"`
+}
+
+type Data struct {
+	APIs []API `json:"data"`
+}

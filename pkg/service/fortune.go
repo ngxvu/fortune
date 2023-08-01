@@ -15,66 +15,66 @@ func NewFortuneService(client *http.Client) FortuneInterface {
 }
 
 type FortuneInterface interface {
-	ProcessURLsCate(client *http.Client, urls model.Data) (model.DataCrawled, error)
+	ProcessURLsParentCate(client *http.Client, urls model.Data) (model.DataCatCrawled, error)
+	ProcessURLsShop(client *http.Client, urls model.Data) (model.DataShopCrawled, error)
 }
 
-//func (s *FortuneService) ProcessURLsCate(client *http.Client, urls model.Data) (string, error) {
-//	method := "GET"
-//	var bodies [][]byte
-//	for _, urls := range urls.APIs {
-//		req, err := http.NewRequest(method, urls.URL, nil)
-//		if err != nil {
-//			return "", err
-//		}
-//		res, err := client.Do(req)
-//		if err != nil {
-//			return "", err
-//		}
-//		defer res.Body.Close()
-//
-//		body, err := ioutil.ReadAll(res.Body)
-//		if err != nil {
-//			return "", err
-//		}
-//		bodies = append(bodies, body)
-//	}
-//
-//	var result string
-//	for _, body := range bodies {
-//		result += string(body)
-//	}
-//	return result, nil
-//}
-
-func (s *FortuneService) ProcessURLsCate(client *http.Client, urls model.Data) (model.DataCrawled, error) {
+func (s *FortuneService) ProcessURLsParentCate(client *http.Client, urls model.Data) (model.DataCatCrawled, error) {
 	method := "GET"
-	var bodies []model.DataCrawled
+	var bodies []model.DataCatCrawled
 	for _, urls := range urls.APIs {
 		req, err := http.NewRequest(method, urls.URL, nil)
 		if err != nil {
-			return model.DataCrawled{}, err
+			return model.DataCatCrawled{}, err
 		}
 		res, err := client.Do(req)
 		if err != nil {
-			return model.DataCrawled{}, err
+			return model.DataCatCrawled{}, err
 		}
 		defer res.Body.Close()
 
-		var body model.DataCrawled
+		var body model.DataCatCrawled
 		err = json.NewDecoder(res.Body).Decode(&body)
 		if err != nil {
-			return model.DataCrawled{}, err
+			return model.DataCatCrawled{}, err
 		}
 		bodies = append(bodies, body)
 	}
-
-	rs := model.DataCrawled{}
-
+	rs := model.DataCatCrawled{}
 	for _, v := range bodies {
 		for _, u := range v.Data.CategoryList {
 			rs.Data.CategoryList = append(rs.Data.CategoryList, u)
 		}
 	}
+	return rs, nil
+}
 
+func (s *FortuneService) ProcessURLsShop(client *http.Client, urls model.Data) (model.DataShopCrawled, error) {
+	method := "GET"
+	var bodies []model.DataShopCrawled
+	for _, urls := range urls.APIs {
+		req, err := http.NewRequest(method, urls.URL, nil)
+		if err != nil {
+			return model.DataShopCrawled{}, err
+		}
+		res, err := client.Do(req)
+		if err != nil {
+			return model.DataShopCrawled{}, err
+		}
+		defer res.Body.Close()
+
+		var body model.DataShopCrawled
+		err = json.NewDecoder(res.Body).Decode(&body)
+		if err != nil {
+			return model.DataShopCrawled{}, err
+		}
+		bodies = append(bodies, body)
+	}
+	rs := model.DataShopCrawled{}
+	for _, v := range bodies {
+		for _, u := range v.Data.OfficialShops {
+			rs.Data.OfficialShops = append(rs.Data.OfficialShops, u)
+		}
+	}
 	return rs, nil
 }
