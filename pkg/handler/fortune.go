@@ -93,7 +93,7 @@ func (h *FortuneHandler) ProcessURLsItem1(r *ginext.Request) (*ginext.Response, 
 		return nil, ginext.NewError(http.StatusNotFound, "")
 	}
 	client := &http.Client{}
-	rs, err := h.service.ProcessURLsItem1(client, urls)
+	rs, err := h.service.ProcessURLsItem(client, urls)
 	if err != nil {
 		log.Fatal("Fail to Process Service URLsShop.")
 		return nil, err
