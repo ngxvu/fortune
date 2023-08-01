@@ -71,6 +71,13 @@ func (s *FortuneService) ProcessURLsShop(client *http.Client, urls model.Data) (
 		bodies = append(bodies, body)
 	}
 	rs := model.DataShopCrawled{}
+
+	for i := 0; i < len(bodies); i++ {
+		if len(bodies) > 0 {
+			rs.Data.Total += bodies[i].Data.Total
+		}
+	}
+
 	for _, v := range bodies {
 		for _, u := range v.Data.OfficialShops {
 			rs.Data.OfficialShops = append(rs.Data.OfficialShops, u)
