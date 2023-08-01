@@ -26,6 +26,8 @@ func NewService() *Service {
 	v1Api := s.Router.Group("/api/v1")
 	v1Api.POST("/cate/parse-to-json", ginext.WrapHandler(fortuneHandle.ProcessURLsParentCate))
 	v1Api.POST("/shop/parse-to-json", ginext.WrapHandler(fortuneHandle.ProcessURLsShop))
+	v1Api.POST("/item/parse-to-json", ginext.WrapHandler(fortuneHandle.ProcessURLsItem))
+	v1Api.POST("/item1/parse-to-json", ginext.WrapHandler(fortuneHandle.ProcessURLsItem1))
 
 	return s
 }
